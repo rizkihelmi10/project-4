@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Showcase Portfolio</title>
+</head>
+
+<body>
+    <!-- Verify: the page loads with the News + Weather pair selected and no error banner; each pair button fills both panels; the preview allows 20 API calls per run, so press Refresh to start a new run. -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">📊 API Showcase Portfolio</h1>
+                <p class="app-subtitle">Advanced Multi-API Integration Dashboard</p>
+            </div>
+            <div class="header-controls">
+                <button id="themeToggle" class="btn-icon" title="Toggle theme">🌙</button>
+                <button id="refreshBtn" class="btn-icon" title="Refresh data">🔄</button>
+            </div>
+        </header>
+
+        <!-- API Selection Panel -->
+        <section class="api-selection">
+            <h2>Choose Your API Combination</h2>
+            <div class="api-options">
+                <button class="api-option active" data-combo="news-weather">
+                    <span class="api-icon">📰☁️</span>
+                    <span class="api-name">News + Weather</span>
+                </button>
+                <button class="api-option" data-combo="phones-laptops">
+                    <span class="api-icon">📱💻</span>
+                    <span class="api-name">Phones + Laptops</span>
+                </button>
+                <button class="api-option" data-combo="recipe-snacks">
+                    <span class="api-icon">🍳🍿</span>
+                    <span class="api-name">Recipes + Snacks</span>
+                </button>
+                <button class="api-option" data-combo="people-quotes">
+                    <span class="api-icon">🧑💬</span>
+                    <span class="api-name">People + Quotes</span>
+                </button>
+            </div>
+            <p class="budget-note">The preview allows 20 API calls per run. If a panel shows an error about calls, press
+                Refresh in the preview to start a new run.</p>
+        </section>
+
+        <!-- Controls Panel -->
+        <section class="controls-panel">
+            <div class="search-section">
+                <input type="text" id="searchInput" placeholder="Search across all data..." class="search-input">
+                <button id="searchBtn" class="btn-primary">Search</button>
+                <button id="clearSearchBtn" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="filter-section">
+                <select id="filterCategory" class="filter-select">
+                    <option value="all">All Categories</option>
+                </select>
+
+                <select id="sortBy" class="filter-select">
+                    <option value="date-desc">Newest First</option>
+                    <option value="date-asc">Oldest First</option>
+                    <option value="name-asc">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                    <option value="relevance">Most Relevant</option>
+                </select>
+
+                <div class="view-toggle">
+                    <button id="gridViewBtn" class="view-btn active" title="Grid view">⊞</button>
+                    <button id="listViewBtn" class="view-btn" title="List view">☰</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area (Dual Panel Layout) -->
+        <main class="main-content">
+            <!-- Primary API Panel (Left) -->
+            <section class="api-panel primary-panel">
+                <div class="panel-header">
+                    <h2 id="primaryApiTitle">Hacker News</h2>
+                    <span class="item-count" id="primaryCount">0 items</span>
+                </div>
+
+                <!-- Loading State -->
+                <div id="primaryLoading" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p>Loading data...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="primaryError" class="error-state hidden">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Failed to load data</h3>
+                    <p class="error-message"></p>
+                    <button class="btn-retry">Try Again</button>
+                </div>
+
+                <!-- Data Grid -->
+                <div id="primaryGrid" class="data-grid">
+                    <!-- Items will be dynamically inserted here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="primaryPagination" class="pagination hidden">
+                    <button id="primaryPrevBtn" class="btn-page" disabled>← Previous</button>
+                    <span class="page-info" id="primaryPageInfo">Page 1 of 1</span>
+                    <button id="primaryNextBtn" class="btn-page">Next →</button>
+                </div>
+            </section>
+
+            <!-- Secondary API Panel (Right) -->
+            <section class="api-panel secondary-panel">
+                <div class="panel-header">
+                    <h2 id="secondaryApiTitle">Weather (wttr.in)</h2>
+                    <span class="item-count" id="secondaryCount">0 items</span>
+                </div>
+
+                <!-- Loading State -->
+                <div id="secondaryLoading" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p>Loading data...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="secondaryError" class="error-state hidden">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Failed to load data</h3>
+                    <p class="error-message"></p>
+                    <button class="btn-retry">Try Again</button>
+                </div>
+
+                <!-- Data Grid -->
+                <div id="secondaryGrid" class="data-grid">
+                    <!-- Items will be dynamically inserted here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="secondaryPagination" class="pagination hidden">
+                    <button id="secondaryPrevBtn" class="btn-page" disabled>← Previous</button>
+                    <span class="page-info" id="secondaryPageInfo">Page 1 of 1</span>
+                    <button id="secondaryNextBtn" class="btn-page">Next →</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Favorites Sidebar -->
+        <aside class="favorites-sidebar">
+            <div class="sidebar-header">
+                <h3>⭐ Favorites</h3>
+                <button id="clearFavoritesBtn" class="btn-clear">Clear All</button>
+            </div>
+            <div id="favoritesList" class="favorites-list">
+                <p class="empty-state">No favorites yet. Click the ⭐ on items to save them!</p>
+            </div>
+        </aside>
+
+        <!-- Detail Modal -->
+        <div id="detailModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close">✕</button>
+                <div id="detailContent" class="detail-body">
+                    <!-- Detailed item information will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Footer -->
+        <footer class="stats-footer">
+            <div class="stat-card">
+                <span class="stat-value" id="totalItemsViewed">0</span>
+                <span class="stat-label">Items Viewed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="totalSearches">0</span>
+                <span class="stat-label">Searches</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="totalFavorites">0</span>
+                <span class="stat-label">Favorites</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="cacheHits">0</span>
+                <span class="stat-label">Cache Hits</span>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
